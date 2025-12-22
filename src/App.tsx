@@ -503,6 +503,10 @@ const GestureController = ({ onGesture, onMove, onStatus, debugMode }: any) => {
   );
 };
 
+// 在文件顶部添加背景音乐文件路径
+const BACKGROUND_MUSIC_URL = '/videos/Taylor Swift-Last Christmas.mp3'; // 假设音乐文件在public目录下
+
+
 // --- App Entry ---
 export default function GrandTreeApp() {
   const [sceneState, setSceneState] = useState<'CHAOS' | 'FORMED'>('CHAOS');
@@ -510,14 +514,78 @@ export default function GrandTreeApp() {
   const [aiStatus, setAiStatus] = useState("INITIALIZING...");
   const [debugMode, setDebugMode] = useState(false);
 
+  // 新增：背景音乐状态
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  // 添加音乐自动播放逻辑
+
+  useEffect(() => {
+    // 创建音频元素
+    const audio = new Audio(BACKGROUND_MUSIC_URL);
+    audio.loop = true;
+    audio.volume = 0.3; // 适度音量
+    audioRef.current = audio;
+
+    // 尝试自动播放（需用户交互才能成功）
+    const playMusic = async () => {
+      try {
+        await audio.play();
+        setIsMusicPlaying(true);
+      } catch (error) {
+        console.log('Auto-play failed:', error);
+        // 如果自动播放失败，需要用户交互才能播放
+      }
+    };
+
+    // 尝试自动播放
+    playMusic();
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
+
+  // 处理用户点击开始播放
+  const handlePlayMusic = () => {
+    if (audioRef.current && !isMusicPlaying) {
+      audioRef.current.play().then(() => {
+        setIsMusicPlaying(true);
+      }).catch(error => {
+        console.log('Playback failed:', error);
+      });
+    }
+  };
+
   return (
     <div style={{ width: '100vw', height: '100vh', backgroundColor: '#000', position: 'relative', overflow: 'hidden' }}>
+
+      {/* 音频元素（隐藏） */}
+      <audio ref={audioRef} src={BACKGROUND_MUSIC_URL} loop />
+
       <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
         <Canvas dpr={[1, 2]} gl={{ toneMapping: THREE.ReinhardToneMapping }} shadows>
             <Experience sceneState={sceneState} rotationSpeed={rotationSpeed} />
         </Canvas>
       </div>
       <GestureController onGesture={setSceneState} onMove={setRotationSpeed} onStatus={setAiStatus} debugMode={debugMode} />
+
+      {/* UI - Music Control */}
+      <div style={{
+        position: 'absolute',
+        bottom: '30px',
+        left: '40px',
+        zIndex: 10,
+        color: isMusicPlaying ? '#FFD700' : '#555',
+        fontSize: '12px',
+        fontFamily: 'sans-serif',
+        userSelect: 'none',
+        cursor: 'pointer',
+        transition: 'color 0.3s'
+      }}
+      onClick={handlePlayMusic}>
+        {isMusicPlaying ? '🎵 Background Music' : '🔊 Tap to Play Music'}
+      </div>
 
       {/* UI - Stats */}
       {/*<div style={{ position: 'absolute', bottom: '30px', left: '40px', color: '#888', zIndex: 10, fontFamily: 'sans-serif', userSelect: 'none' }}>*/}
@@ -537,9 +605,9 @@ export default function GrandTreeApp() {
 
       {/* UI - Buttons */}
       <div style={{ position: 'absolute', bottom: '30px', right: '40px', zIndex: 10, display: 'flex', gap: '10px' }}>
-        {/*<button onClick={() => setDebugMode(!debugMode)} style={{ padding: '12px 15px', backgroundColor: debugMode ? '#FFD700' : 'rgba(0,0,0,0.5)', border: '1px solid #FFD700', color: debugMode ? '#000' : '#FFD700', fontFamily: 'sans-serif', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>*/}
-        {/*   {debugMode ? 'HIDE DEBUG' : '🛠 DEBUG'}*/}
-        {/*</button>*/}
+        <button onClick={() => setDebugMode(!debugMode)} style={{ padding: '12px 15px', backgroundColor: debugMode ? '#FFD700' : 'rgba(0,0,0,0.5)', border: '1px solid #FFD700', color: debugMode ? '#000' : '#FFD700', fontFamily: 'sans-serif', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
+           {debugMode ? 'HIDE DEBUG' : '🛠 DEBUG'}
+        </button>
         <button onClick={() => setSceneState(s => s === 'CHAOS' ? 'FORMED' : 'CHAOS')} style={{ padding: '12px 30px', backgroundColor: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255, 215, 0, 0.5)', color: '#FFD700', fontFamily: 'serif', fontSize: '14px', fontWeight: 'bold', letterSpacing: '3px', textTransform: 'uppercase', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
            {sceneState === 'CHAOS' ? 'Assemble Tree' : 'Disperse'}
         </button>

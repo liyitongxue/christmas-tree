@@ -56,8 +56,8 @@ const CONFIG = {
 
 // --- Shader Material (Foliage) ---
 const FoliageMaterial = shaderMaterial(
-  { uTime: 0, uColor: new THREE.Color(CONFIG.colors.emerald), uProgress: 0 },
-  `uniform float uTime; uniform float uProgress; attribute vec3 aTargetPos; attribute float aRandom;
+    { uTime: 0, uColor: new THREE.Color(CONFIG.colors.emerald), uProgress: 0 },
+    `uniform float uTime; uniform float uProgress; attribute vec3 aTargetPos; attribute float aRandom;
   varying vec2 vUv; varying float vMix;
   float cubicInOut(float t) { return t < 0.5 ? 4.0 * t * t * t : 0.5 * pow(2.0 * t - 2.0, 3.0) + 1.0; }
   void main() {
@@ -70,7 +70,7 @@ const FoliageMaterial = shaderMaterial(
     gl_Position = projectionMatrix * mvPosition;
     vMix = t;
   }`,
-  `uniform vec3 uColor; varying float vMix;
+    `uniform vec3 uColor; varying float vMix;
   void main() {
     float r = distance(gl_PointCoord, vec2(0.5)); if (r > 0.5) discard;
     vec3 finalColor = mix(uColor * 0.3, uColor * 1.2, vMix);
@@ -111,15 +111,15 @@ const Foliage = ({ state }: { state: 'CHAOS' | 'FORMED' }) => {
     }
   });
   return (
-    <points>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-aTargetPos" args={[targetPositions, 3]} />
-        <bufferAttribute attach="attributes-aRandom" args={[randoms, 1]} />
-      </bufferGeometry>
-      {/* @ts-ignore */}
-      <foliageMaterial ref={materialRef} transparent depthWrite={false} blending={THREE.AdditiveBlending} />
-    </points>
+      <points>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+          <bufferAttribute attach="attributes-aTargetPos" args={[targetPositions, 3]} />
+          <bufferAttribute attach="attributes-aRandom" args={[randoms, 1]} />
+        </bufferGeometry>
+        {/* @ts-ignore */}
+        <foliageMaterial ref={materialRef} transparent depthWrite={false} blending={THREE.AdditiveBlending} />
+      </points>
   );
 };
 
@@ -179,57 +179,57 @@ const PhotoOrnaments = ({ state }: { state: 'CHAOS' | 'FORMED' }) => {
       group.position.copy(objData.currentPos);
 
       if (isFormed) {
-         const targetLookPos = new THREE.Vector3(group.position.x * 2, group.position.y + 0.5, group.position.z * 2);
-         group.lookAt(targetLookPos);
+        const targetLookPos = new THREE.Vector3(group.position.x * 2, group.position.y + 0.5, group.position.z * 2);
+        group.lookAt(targetLookPos);
 
-         const wobbleX = Math.sin(time * objData.wobbleSpeed + objData.wobbleOffset) * 0.05;
-         const wobbleZ = Math.cos(time * objData.wobbleSpeed * 0.8 + objData.wobbleOffset) * 0.05;
-         group.rotation.x += wobbleX;
-         group.rotation.z += wobbleZ;
+        const wobbleX = Math.sin(time * objData.wobbleSpeed + objData.wobbleOffset) * 0.05;
+        const wobbleZ = Math.cos(time * objData.wobbleSpeed * 0.8 + objData.wobbleOffset) * 0.05;
+        group.rotation.x += wobbleX;
+        group.rotation.z += wobbleZ;
 
       } else {
-         group.rotation.x += delta * objData.rotationSpeed.x;
-         group.rotation.y += delta * objData.rotationSpeed.y;
-         group.rotation.z += delta * objData.rotationSpeed.z;
+        group.rotation.x += delta * objData.rotationSpeed.x;
+        group.rotation.y += delta * objData.rotationSpeed.y;
+        group.rotation.z += delta * objData.rotationSpeed.z;
       }
     });
   });
 
   return (
-    <group ref={groupRef}>
-      {data.map((obj, i) => (
-        <group key={i} scale={[obj.scale, obj.scale, obj.scale]} rotation={state === 'CHAOS' ? obj.chaosRotation : [0,0,0]}>
-          {/* 正面 */}
-          <group position={[0, 0, 0.015]}>
-            <mesh geometry={photoGeometry}>
-              <meshStandardMaterial
-                map={textures[obj.textureIndex]}
-                roughness={0.5} metalness={0}
-                emissive={CONFIG.colors.white} emissiveMap={textures[obj.textureIndex]} emissiveIntensity={1.0}
-                side={THREE.FrontSide}
-              />
-            </mesh>
-            <mesh geometry={borderGeometry} position={[0, -0.15, -0.01]}>
-              <meshStandardMaterial color={obj.borderColor} roughness={0.9} metalness={0} side={THREE.FrontSide} />
-            </mesh>
-          </group>
-          {/* 背面 */}
-          <group position={[0, 0, -0.015]} rotation={[0, Math.PI, 0]}>
-            <mesh geometry={photoGeometry}>
-              <meshStandardMaterial
-                map={textures[obj.textureIndex]}
-                roughness={0.5} metalness={0}
-                emissive={CONFIG.colors.white} emissiveMap={textures[obj.textureIndex]} emissiveIntensity={1.0}
-                side={THREE.FrontSide}
-              />
-            </mesh>
-            <mesh geometry={borderGeometry} position={[0, -0.15, -0.01]}>
-              <meshStandardMaterial color={obj.borderColor} roughness={0.9} metalness={0} side={THREE.FrontSide} />
-            </mesh>
-          </group>
-        </group>
-      ))}
-    </group>
+      <group ref={groupRef}>
+        {data.map((obj, i) => (
+            <group key={i} scale={[obj.scale, obj.scale, obj.scale]} rotation={state === 'CHAOS' ? obj.chaosRotation : [0,0,0]}>
+              {/* 正面 */}
+              <group position={[0, 0, 0.015]}>
+                <mesh geometry={photoGeometry}>
+                  <meshStandardMaterial
+                      map={textures[obj.textureIndex]}
+                      roughness={0.5} metalness={0}
+                      emissive={CONFIG.colors.white} emissiveMap={textures[obj.textureIndex]} emissiveIntensity={1.0}
+                      side={THREE.FrontSide}
+                  />
+                </mesh>
+                <mesh geometry={borderGeometry} position={[0, -0.15, -0.01]}>
+                  <meshStandardMaterial color={obj.borderColor} roughness={0.9} metalness={0} side={THREE.FrontSide} />
+                </mesh>
+              </group>
+              {/* 背面 */}
+              <group position={[0, 0, -0.015]} rotation={[0, Math.PI, 0]}>
+                <mesh geometry={photoGeometry}>
+                  <meshStandardMaterial
+                      map={textures[obj.textureIndex]}
+                      roughness={0.5} metalness={0}
+                      emissive={CONFIG.colors.white} emissiveMap={textures[obj.textureIndex]} emissiveIntensity={1.0}
+                      side={THREE.FrontSide}
+                  />
+                </mesh>
+                <mesh geometry={borderGeometry} position={[0, -0.15, -0.01]}>
+                  <meshStandardMaterial color={obj.borderColor} roughness={0.9} metalness={0} side={THREE.FrontSide} />
+                </mesh>
+              </group>
+            </group>
+        ))}
+      </group>
   );
 };
 
@@ -278,13 +278,13 @@ const ChristmasElements = ({ state }: { state: 'CHAOS' | 'FORMED' }) => {
   });
 
   return (
-    <group ref={groupRef}>
-      {data.map((obj, i) => {
-        let geometry; if (obj.type === 0) geometry = boxGeometry; else if (obj.type === 1) geometry = sphereGeometry; else geometry = caneGeometry;
-        return ( <mesh key={i} scale={[obj.scale, obj.scale, obj.scale]} geometry={geometry} rotation={obj.chaosRotation}>
-          <meshStandardMaterial color={obj.color} roughness={0.3} metalness={0.4} emissive={obj.color} emissiveIntensity={0.2} />
-        </mesh> )})}
-    </group>
+      <group ref={groupRef}>
+        {data.map((obj, i) => {
+          let geometry; if (obj.type === 0) geometry = boxGeometry; else if (obj.type === 1) geometry = sphereGeometry; else geometry = caneGeometry;
+          return ( <mesh key={i} scale={[obj.scale, obj.scale, obj.scale]} geometry={geometry} rotation={obj.chaosRotation}>
+            <meshStandardMaterial color={obj.color} roughness={0.3} metalness={0.4} emissive={obj.color} emissiveIntensity={0.2} />
+          </mesh> )})}
+      </group>
   );
 };
 
@@ -322,11 +322,11 @@ const FairyLights = ({ state }: { state: 'CHAOS' | 'FORMED' }) => {
   });
 
   return (
-    <group ref={groupRef}>
-      {data.map((obj, i) => ( <mesh key={i} scale={[0.15, 0.15, 0.15]} geometry={geometry}>
+      <group ref={groupRef}>
+        {data.map((obj, i) => ( <mesh key={i} scale={[0.15, 0.15, 0.15]} geometry={geometry}>
           <meshStandardMaterial color={obj.color} emissive={obj.color} emissiveIntensity={0} toneMapped={false} />
         </mesh> ))}
-    </group>
+      </group>
   );
 };
 
@@ -371,11 +371,11 @@ const TopStar = ({ state }: { state: 'CHAOS' | 'FORMED' }) => {
   });
 
   return (
-    <group ref={groupRef} position={[0, CONFIG.tree.height / 2 + 1.8, 0]}>
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.2}>
-        <mesh geometry={starGeometry} material={goldMaterial} />
-      </Float>
-    </group>
+      <group ref={groupRef} position={[0, CONFIG.tree.height / 2 + 1.8, 0]}>
+        <Float speed={2} rotationIntensity={0.2} floatIntensity={0.2}>
+          <mesh geometry={starGeometry} material={goldMaterial} />
+        </Float>
+      </group>
   );
 };
 
@@ -390,35 +390,35 @@ const Experience = ({ sceneState, rotationSpeed }: { sceneState: 'CHAOS' | 'FORM
   });
 
   return (
-    <>
-      <PerspectiveCamera makeDefault position={[0, 8, 60]} fov={45} />
-      <OrbitControls ref={controlsRef} enablePan={false} enableZoom={true} minDistance={30} maxDistance={120} autoRotate={rotationSpeed === 0 && sceneState === 'FORMED'} autoRotateSpeed={0.3} maxPolarAngle={Math.PI / 1.7} />
+      <>
+        <PerspectiveCamera makeDefault position={[0, 8, 60]} fov={45} />
+        <OrbitControls ref={controlsRef} enablePan={false} enableZoom={true} minDistance={30} maxDistance={120} autoRotate={rotationSpeed === 0 && sceneState === 'FORMED'} autoRotateSpeed={0.3} maxPolarAngle={Math.PI / 1.7} />
 
-      <color attach="background" args={['#000300']} />
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-      <Environment preset="night" background={false} />
+        <color attach="background" args={['#000300']} />
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+        <Environment preset="night" background={false} />
 
-      <ambientLight intensity={0.4} color="#003311" />
-      <pointLight position={[30, 30, 30]} intensity={100} color={CONFIG.colors.warmLight} />
-      <pointLight position={[-30, 10, -30]} intensity={50} color={CONFIG.colors.gold} />
-      <pointLight position={[0, -20, 10]} intensity={30} color="#ffffff" />
+        <ambientLight intensity={0.4} color="#003311" />
+        <pointLight position={[30, 30, 30]} intensity={100} color={CONFIG.colors.warmLight} />
+        <pointLight position={[-30, 10, -30]} intensity={50} color={CONFIG.colors.gold} />
+        <pointLight position={[0, -20, 10]} intensity={30} color="#ffffff" />
 
-      <group position={[0, -6, 0]}>
-        <Foliage state={sceneState} />
-        <Suspense fallback={null}>
-           <PhotoOrnaments state={sceneState} />
-           <ChristmasElements state={sceneState} />
-           <FairyLights state={sceneState} />
-           <TopStar state={sceneState} />
-        </Suspense>
-        <Sparkles count={600} scale={50} size={8} speed={0.4} opacity={0.4} color={CONFIG.colors.silver} />
-      </group>
+        <group position={[0, -6, 0]}>
+          <Foliage state={sceneState} />
+          <Suspense fallback={null}>
+            <PhotoOrnaments state={sceneState} />
+            <ChristmasElements state={sceneState} />
+            <FairyLights state={sceneState} />
+            <TopStar state={sceneState} />
+          </Suspense>
+          <Sparkles count={600} scale={50} size={8} speed={0.4} opacity={0.4} color={CONFIG.colors.silver} />
+        </group>
 
-      <EffectComposer>
-        <Bloom luminanceThreshold={0.8} luminanceSmoothing={0.1} intensity={1.5} radius={0.5} mipmapBlur />
-        <Vignette eskil={false} offset={0.1} darkness={1.2} />
-      </EffectComposer>
-    </>
+        <EffectComposer>
+          <Bloom luminanceThreshold={0.8} luminanceSmoothing={0.1} intensity={1.5} radius={0.5} mipmapBlur />
+          <Vignette eskil={false} offset={0.1} darkness={1.2} />
+        </EffectComposer>
+      </>
   );
 };
 
@@ -454,7 +454,7 @@ const GestureController = ({ onGesture, onMove, onStatus, debugMode }: any) => {
             predictWebcam();
           }
         } else {
-            onStatus("ERROR: CAMERA PERMISSION DENIED");
+          onStatus("ERROR: CAMERA PERMISSION DENIED");
         }
       } catch (err: any) {
         onStatus(`ERROR: ${err.message || 'MODEL FAILED'}`);
@@ -464,29 +464,29 @@ const GestureController = ({ onGesture, onMove, onStatus, debugMode }: any) => {
     const predictWebcam = () => {
       if (gestureRecognizer && videoRef.current && canvasRef.current) {
         if (videoRef.current.videoWidth > 0) {
-            const results = gestureRecognizer.recognizeForVideo(videoRef.current, Date.now());
-            const ctx = canvasRef.current.getContext("2d");
-            if (ctx && debugMode) {
-                ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-                canvasRef.current.width = videoRef.current.videoWidth; canvasRef.current.height = videoRef.current.videoHeight;
-                if (results.landmarks) for (const landmarks of results.landmarks) {
-                        const drawingUtils = new DrawingUtils(ctx);
-                        drawingUtils.drawConnectors(landmarks, GestureRecognizer.HAND_CONNECTIONS, { color: "#FFD700", lineWidth: 2 });
-                        drawingUtils.drawLandmarks(landmarks, { color: "#FF0000", lineWidth: 1 });
-                }
-            } else if (ctx && !debugMode) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+          const results = gestureRecognizer.recognizeForVideo(videoRef.current, Date.now());
+          const ctx = canvasRef.current.getContext("2d");
+          if (ctx && debugMode) {
+            ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            canvasRef.current.width = videoRef.current.videoWidth; canvasRef.current.height = videoRef.current.videoHeight;
+            if (results.landmarks) for (const landmarks of results.landmarks) {
+              const drawingUtils = new DrawingUtils(ctx);
+              drawingUtils.drawConnectors(landmarks, GestureRecognizer.HAND_CONNECTIONS, { color: "#FFD700", lineWidth: 2 });
+              drawingUtils.drawLandmarks(landmarks, { color: "#FF0000", lineWidth: 1 });
+            }
+          } else if (ctx && !debugMode) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-            if (results.gestures.length > 0) {
-              const name = results.gestures[0][0].categoryName; const score = results.gestures[0][0].score;
-              if (score > 0.4) {
-                 if (name === "Open_Palm") onGesture("CHAOS"); if (name === "Closed_Fist") onGesture("FORMED");
-                 if (debugMode) onStatus(`DETECTED: ${name}`);
-              }
-              if (results.landmarks.length > 0) {
-                const speed = (0.5 - results.landmarks[0][0].x) * 0.15;
-                onMove(Math.abs(speed) > 0.01 ? speed : 0);
-              }
-            } else { onMove(0); if (debugMode) onStatus("AI READY: NO HAND"); }
+          if (results.gestures.length > 0) {
+            const name = results.gestures[0][0].categoryName; const score = results.gestures[0][0].score;
+            if (score > 0.4) {
+              if (name === "Open_Palm") onGesture("CHAOS"); if (name === "Closed_Fist") onGesture("FORMED");
+              if (debugMode) onStatus(`DETECTED: ${name}`);
+            }
+            if (results.landmarks.length > 0) {
+              const speed = (0.5 - results.landmarks[0][0].x) * 0.15;
+              onMove(Math.abs(speed) > 0.01 ? speed : 0);
+            }
+          } else { onMove(0); if (debugMode) onStatus("AI READY: NO HAND"); }
         }
         requestRef = requestAnimationFrame(predictWebcam);
       }
@@ -496,15 +496,15 @@ const GestureController = ({ onGesture, onMove, onStatus, debugMode }: any) => {
   }, [onGesture, onMove, onStatus, debugMode]);
 
   return (
-    <>
-      <video ref={videoRef} style={{ opacity: debugMode ? 0.6 : 0, position: 'fixed', top: 0, right: 0, width: debugMode ? '320px' : '1px', zIndex: debugMode ? 100 : -1, pointerEvents: 'none', transform: 'scaleX(-1)' }} playsInline muted autoPlay />
-      <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, right: 0, width: debugMode ? '320px' : '1px', height: debugMode ? 'auto' : '1px', zIndex: debugMode ? 101 : -1, pointerEvents: 'none', transform: 'scaleX(-1)' }} />
-    </>
+      <>
+        <video ref={videoRef} style={{ opacity: debugMode ? 0.6 : 0, position: 'fixed', top: 0, right: 0, width: debugMode ? '320px' : '1px', zIndex: debugMode ? 100 : -1, pointerEvents: 'none', transform: 'scaleX(-1)' }} playsInline muted autoPlay />
+        <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, right: 0, width: debugMode ? '320px' : '1px', height: debugMode ? 'auto' : '1px', zIndex: debugMode ? 101 : -1, pointerEvents: 'none', transform: 'scaleX(-1)' }} />
+      </>
   );
 };
 
-// 在文件顶部添加背景音乐文件路径
-const BACKGROUND_MUSIC_URL = '/videos/Taylor Swift-Last Christmas.mp3'; // 假设音乐文件在public目录下
+// 在文件顶部确保已定义音乐路径
+const BACKGROUND_MUSIC_URL = '/videos/Taylor Swift-Last Christmas.mp3';
 
 
 // --- App Entry ---
@@ -514,114 +514,126 @@ export default function GrandTreeApp() {
   const [aiStatus, setAiStatus] = useState("INITIALIZING...");
   const [debugMode, setDebugMode] = useState(false);
 
-  // 新增：背景音乐状态
+// --- 音频状态 ---
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  // 添加音乐自动播放逻辑
+  const [showPlayPrompt, setShowPlayPrompt] = useState(true); // 默认显示提示（因自动播放可能被阻止）
 
+  // 添加音乐自动播放逻辑
   useEffect(() => {
-    // 创建音频元素
+    // 创建音频元素（避免在 JSX 中直接渲染导致多次创建）
     const audio = new Audio(BACKGROUND_MUSIC_URL);
     audio.loop = true;
-    audio.volume = 0.3; // 适度音量
+    audio.volume = 0.4;
     audioRef.current = audio;
 
-    // 尝试自动播放（需用户交互才能成功）
-    const playMusic = async () => {
+    // 尝试自动播放（多数浏览器会静音或阻止）
+    const attemptAutoPlay = async () => {
       try {
         await audio.play();
         setIsMusicPlaying(true);
       } catch (error) {
-        console.log('Auto-play failed:', error);
-        // 如果自动播放失败，需要用户交互才能播放
+        // 自动播放被阻止，但仍然显示按钮让用户手动播放
+        console.warn('Auto-play blocked. User must interact to play music.');
       }
     };
 
-    // 尝试自动播放
-    playMusic();
+    attemptAutoPlay();
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current = null;
       }
     };
   }, []);
 
-  // 处理用户点击开始播放
-  const handlePlayMusic = () => {
-    if (audioRef.current && !isMusicPlaying) {
-      audioRef.current.play().then(() => {
+  const toggleMusic = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (isMusicPlaying) {
+      audio.pause();
+      setIsMusicPlaying(false);
+    } else {
+      audio.play().then(() => {
         setIsMusicPlaying(true);
-      }).catch(error => {
-        console.log('Playback failed:', error);
+      }).catch((err) => {
+        console.error('Failed to play audio:', err);
       });
     }
   };
 
   return (
-    <div style={{ width: '100vw', height: '100vh', backgroundColor: '#000', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ width: '100vw', height: '100vh', backgroundColor: '#000', position: 'relative', overflow: 'hidden' }}>
 
-      {/* 音频元素（隐藏） */}
-      <audio ref={audioRef} src={BACKGROUND_MUSIC_URL} loop />
-
-      <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
-        <Canvas dpr={[1, 2]} gl={{ toneMapping: THREE.ReinhardToneMapping }} shadows>
+        <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
+          <Canvas dpr={[1, 2]} gl={{ toneMapping: THREE.ReinhardToneMapping }} shadows>
             <Experience sceneState={sceneState} rotationSpeed={rotationSpeed} />
-        </Canvas>
-      </div>
-      <GestureController onGesture={setSceneState} onMove={setRotationSpeed} onStatus={setAiStatus} debugMode={debugMode} />
+          </Canvas>
+        </div>
+        <GestureController onGesture={setSceneState} onMove={setRotationSpeed} onStatus={setAiStatus} debugMode={debugMode} />
 
-      {/* UI - Music Control */}
-      <div style={{
-        position: 'absolute',
-        bottom: '30px',
-        left: '40px',
-        zIndex: 10,
-        color: isMusicPlaying ? '#FFD700' : '#555',
-        fontSize: '12px',
-        fontFamily: 'sans-serif',
-        userSelect: 'none',
-        cursor: 'pointer',
-        transition: 'color 0.3s'
-      }}
-      onClick={handlePlayMusic}>
-        {isMusicPlaying ? '🎵 Background Music' : '🔊 Tap to Play Music'}
-      </div>
-
-      {/* UI - Stats */}
-      {/*<div style={{ position: 'absolute', bottom: '30px', left: '40px', color: '#888', zIndex: 10, fontFamily: 'sans-serif', userSelect: 'none' }}>*/}
-      {/*  <div style={{ marginBottom: '15px' }}>*/}
-      {/*    <p style={{ fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Memories</p>*/}
-      {/*    <p style={{ fontSize: '24px', color: '#FFD700', fontWeight: 'bold', margin: 0 }}>*/}
-      {/*      {CONFIG.counts.ornaments.toLocaleString()} <span style={{ fontSize: '10px', color: '#555', fontWeight: 'normal' }}>POLAROIDS</span>*/}
-      {/*    </p>*/}
-      {/*  </div>*/}
-      {/*  <div>*/}
-      {/*    <p style={{ fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Foliage</p>*/}
-      {/*    <p style={{ fontSize: '24px', color: '#004225', fontWeight: 'bold', margin: 0 }}>*/}
-      {/*      {(CONFIG.counts.foliage / 1000).toFixed(0)}K <span style={{ fontSize: '10px', color: '#555', fontWeight: 'normal' }}>EMERALD NEEDLES</span>*/}
-      {/*    </p>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-
-      {/* UI - Buttons */}
-      <div style={{ position: 'absolute', bottom: '30px', right: '40px', zIndex: 10, display: 'flex', gap: '10px' }}>
-        <button onClick={() => setDebugMode(!debugMode)} style={{ padding: '12px 15px', backgroundColor: debugMode ? '#FFD700' : 'rgba(0,0,0,0.5)', border: '1px solid #FFD700', color: debugMode ? '#000' : '#FFD700', fontFamily: 'sans-serif', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
-           {debugMode ? 'HIDE DEBUG' : '🛠 DEBUG'}
+        {/* UI - Music Control (左下角) */}
+        <button
+            onClick={toggleMusic}
+            style={{
+              position: 'absolute',
+              bottom: '30px',
+              left: '40px',
+              color: '#FFD700',
+              fontSize: '12px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              zIndex: 10,
+              background: 'rgba(0,0,0,0.5)',
+              padding: '12px 15px',
+              backdropFilter: 'blur(4px)',
+              border: '1px solid #FFD700',
+              fontFamily: 'sans-serif',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+        >
+          {isMusicPlaying ? '⏸️ Pause' : '🔊 Play'}
         </button>
-        <button onClick={() => setSceneState(s => s === 'CHAOS' ? 'FORMED' : 'CHAOS')} style={{ padding: '12px 30px', backgroundColor: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255, 215, 0, 0.5)', color: '#FFD700', fontFamily: 'serif', fontSize: '14px', fontWeight: 'bold', letterSpacing: '3px', textTransform: 'uppercase', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
-           {sceneState === 'CHAOS' ? 'Assemble Tree' : 'Disperse'}
-        </button>
-      </div>
 
-      {/* UI - AI Status */}
-      <div style={{ position: 'absolute', top: '20px', left: '50%', transform: 'translateX(-50%)', color: aiStatus.includes('ERROR') ? '#FF0000' : 'rgba(255, 215, 0, 0.4)', fontSize: '10px', letterSpacing: '2px', zIndex: 10, background: 'rgba(0,0,0,0.5)', padding: '4px 8px', borderRadius: '4px' }}>
-        {aiStatus}
-      </div>
+        {/* UI - Stats */}
+        {/*<div style={{ position: 'absolute', bottom: '30px', left: '40px', color: '#888', zIndex: 10, fontFamily: 'sans-serif', userSelect: 'none' }}>*/}
+        {/*  <div style={{ marginBottom: '15px' }}>*/}
+        {/*    <p style={{ fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Memories</p>*/}
+        {/*    <p style={{ fontSize: '24px', color: '#FFD700', fontWeight: 'bold', margin: 0 }}>*/}
+        {/*      {CONFIG.counts.ornaments.toLocaleString()} <span style={{ fontSize: '10px', color: '#555', fontWeight: 'normal' }}>POLAROIDS</span>*/}
+        {/*    </p>*/}
+        {/*  </div>*/}
+        {/*  <div>*/}
+        {/*    <p style={{ fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Foliage</p>*/}
+        {/*    <p style={{ fontSize: '24px', color: '#004225', fontWeight: 'bold', margin: 0 }}>*/}
+        {/*      {(CONFIG.counts.foliage / 1000).toFixed(0)}K <span style={{ fontSize: '10px', color: '#555', fontWeight: 'normal' }}>EMERALD NEEDLES</span>*/}
+        {/*    </p>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
-      {/* UI - AI Status */}
-      <div style={{ position: 'absolute', top: '150px', left: '50%', transform: 'translateX(-50%)', color: '#FFD700', fontFamily: 'serif', fontSize: '16px', fontWeight: 'bold',  zIndex: 10, letterSpacing: '1px'}}>
-        MERRY CHRISTMAS
+        {/* UI - Buttons */}
+        <div style={{ position: 'absolute', bottom: '30px', right: '40px', zIndex: 10, display: 'flex', gap: '10px' }}>
+          <button onClick={() => setDebugMode(!debugMode)} style={{ padding: '12px 15px', backgroundColor: debugMode ? '#FFD700' : 'rgba(0,0,0,0.5)', border: '1px solid #FFD700', color: debugMode ? '#000' : '#FFD700', fontFamily: 'sans-serif', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
+            {debugMode ? 'HIDE DEBUG' : '🛠 DEBUG'}
+          </button>
+          <button onClick={() => setSceneState(s => s === 'CHAOS' ? 'FORMED' : 'CHAOS')} style={{ padding: '12px 15px', backgroundColor: 'rgba(0,0,0,0.5)', border: '1px solid #FFD700', color: '#FFD700', fontFamily: 'serif', fontSize: '12px', fontWeight: 'bold', letterSpacing: '3px', textTransform: 'uppercase', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
+            {sceneState === 'CHAOS' ? 'Assemble' : 'Disperse'}
+          </button>
+        </div>
+
+        {/* UI - AI Status */}
+        <div style={{ position: 'absolute', top: '20px', left: '50%', transform: 'translateX(-50%)', color: aiStatus.includes('ERROR') ? '#FF0000' : 'rgba(255, 215, 0, 0.4)', fontSize: '10px', letterSpacing: '2px', zIndex: 10, background: 'rgba(0,0,0,0.5)', padding: '4px 8px', borderRadius: '4px' }}>
+          {aiStatus}
+        </div>
+
+        {/* UI - AI Status */}
+        <div style={{ position: 'absolute',textAlign: 'center', top: '150px', left: '50%', transform: 'translateX(-50%)', color: '#FFD700', fontFamily: 'serif', fontSize: '16px', fontWeight: 'bold',  zIndex: 10, letterSpacing: '1px'}}>
+          🎄Chang🎄 <p></p>
+          MERRY CHRISTMAS
+        </div>
+
       </div>
-    </div>
   );
 }

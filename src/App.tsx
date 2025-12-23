@@ -514,10 +514,9 @@ export default function GrandTreeApp() {
   const [aiStatus, setAiStatus] = useState("INITIALIZING...");
   const [debugMode, setDebugMode] = useState(false);
 
-// --- 音频状态 ---
+  // --- 音频状态 ---
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [showPlayPrompt, setShowPlayPrompt] = useState(true); // 默认显示提示（因自动播放可能被阻止）
 
   // 添加音乐自动播放逻辑
   useEffect(() => {
